@@ -39,10 +39,12 @@ plugins:
 #   search_only_api_key: 93958e80f7c0fff17d7f34155164d8e9
   
 elasticsearch:
-  url: "http://elastic:changeme@localhost:9200/"
+  url: "http://localhost:9200/"
   index_name: "jekyllvillakunterbunt"
 
-
+webserver_headers:
+  "Access-Control-Allow-Origin": "*"
+  "Server": "localhost"
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.

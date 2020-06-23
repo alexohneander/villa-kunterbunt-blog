@@ -1,0 +1,136 @@
+
+<div id="sitesearch" class="search-container">
+    <div class="search-inner">
+
+        <div class="search-box-container">
+            <input type="text" class="search-box" id="search" placeholder="Suchbegriff eingeben ..."/>
+        </div>
+    
+        <label for"type">Type</label>
+        <button id="search-button">Search</button>
+    
+        <div class="results-container">
+    
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+  
+    function SiteSearch(){
+
+        this.options = {
+            searchHost: 'http://localhost:9200/jekyllvillakunterbunt/_search',
+            searchSize: 20,
+            searchBody: [{}],
+            searchResponse: [{}]
+        }
+    }
+
+    SiteSearch.prototype.init = function(){
+
+        this.registerSearchButtonClickListner();
+        this.registerOpenSearchButtonClickListner();
+        this.registerSearchFieldChangeListner();
+    }
+
+    SiteSearch.prototype.registerSearchButtonClickListner = function(){
+        var me = this;
+
+        let searchButton = document.getElementById('search-button');
+        searchButton.onclick = function(){
+            me.doSearch();
+        }
+    }
+
+    SiteSearch.prototype.registerOpenSearchButtonClickListner = function(){
+        var me = this;
+
+        let openSearchButton = document.getElementById('open-search-button');
+        openSearchButton.onclick = function(){
+            me.showSearchContainer();
+        }
+    }
+
+    SiteSearch.prototype.registerSearchFieldChangeListner = function(){
+
+    }
+
+    SiteSearch.prototype.doSearch = function(){
+
+        let searchQueryString = document.getElementById('search').value;
+        this.searchBody = {
+            'size': this.options.searchSize
+        };
+
+        if (searchQueryString.length !== 0){
+            var query = {
+                'bool': {}
+            };
+
+            query.bool.must = {
+                'multi_match': {
+                    'query': searchQueryString,
+                    'fields': [ 'title^2', 'text^2' ]
+                }
+            };
+
+            this.searchBody.query = query;
+            this.doSearchRequest();
+        }
+    }
+
+    SiteSearch.prototype.doSearchRequest = function(){
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('POST', this.options.searchHost, false);
+        xmlHttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xmlHttp.send(JSON.stringify(this.searchBody));
+
+        this.searchResponse = JSON.parse(xmlHttp.responseText);
+        this.getSearchResults();
+    }
+
+    SiteSearch.prototype.getSearchResults = function(){
+
+        if(this.searchResponse.length !== 0){
+            var resutlList = [{}];
+            this.output = "";
+
+            for (var i = 0; i < this.searchResponse.hits.hits.length; i++) {
+                var searchHit = this.searchResponse.hits.hits[i];
+                var searchResult = {
+                    title:searchHit._source.title, 
+                    text:searchHit._source.text, 
+                    url:searchHit._source.url, 
+                    type:searchHit._source.layout
+                };
+
+                console.log(searchResult);
+                this.output += '<div class="search-result"> <a href="' + searchResult.url + '">' + searchResult.title + '</a> </div>';
+            }
+
+            this.searchResults = resutlList;
+            this.renderSearchResults();
+        }
+    }
+
+    SiteSearch.prototype.renderSearchResults = function(){
+
+        document.querySelector('.results-container').innerHTML = this.output;
+    }
+
+    SiteSearch.prototype.showSearchContainer = function(){
+        document.querySelector('#sitesearch').style.display = "block";
+    }
+
+    document.siteSearch = new SiteSearch();
+
+    if (document.readyState != 'loading') {
+        document.siteSearch.init();
+    } 
+    else {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.siteSearch.init();
+        });
+    }
+</script>

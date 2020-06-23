@@ -26,16 +26,22 @@ github_username:  alexohneander
 
 # Build settings
 markdown: kramdown
+gems:
+  - searchyll
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
 #  - jekyll-loading-lazy
 
-algolia:
-  application_id: BXYYRZBL94
-  index_name: villa-kunterbunt
-  search_only_api_key: 93958e80f7c0fff17d7f34155164d8e9
+# algolia:
+#   application_id: BXYYRZBL94
+#   index_name: villa-kunterbunt
+#   search_only_api_key: 93958e80f7c0fff17d7f34155164d8e9
   
+elasticsearch:
+  url: "http://elastic:changeme@localhost:9200/"
+  index_name: "jekyllvillakunterbunt"
+
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

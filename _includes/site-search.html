@@ -23,7 +23,7 @@
     function SiteSearch(){
 
         this.options = {
-            searchHost: 'http://localhost:9200/jekyllvillakunterbunt/_search',
+            searchHost:  "{{ site.elasticsearch.url }}" + "{{ site.elasticsearch.index_name }}" + "/_search",
             searchSize: 20,
             searchBody: [{}],
             searchResponse: [{}]

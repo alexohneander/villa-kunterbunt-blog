@@ -39,7 +39,7 @@ plugins:
 #   search_only_api_key: 93958e80f7c0fff17d7f34155164d8e9
   
 elasticsearch:
-  url: "http://localhost:9200/"
+  url: "https://rlb90xkige:nidkf9qbic@wellcom-elastic-5629860649.eu-central-1.bonsaisearch.net:443"
   index_name: "jekyllvillakunterbunt"
 
 webserver_headers:

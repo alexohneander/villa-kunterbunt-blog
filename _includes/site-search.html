@@ -1,16 +1,19 @@
 
 <div id="sitesearch" class="search-container">
-    <div class="search-inner">
+    <a class="search-close" id="close-search-button">
+        <span class="icon"></span>
+    </a>
 
+    <div class="search-inner">
+        <h4>Was suchst Du?</h4>
         <div class="search-box-container">
             <input type="text" class="search-box" id="search" placeholder="Suchbegriff eingeben ..."/>
         </div>
+
+        <div class="group">
+            <div class="results-container">
     
-        <label for"type">Type</label>
-        <button id="search-button">Search</button>
-    
-        <div class="results-container">
-    
+            </div>
         </div>
     </div>
 </div>
@@ -29,18 +32,10 @@
 
     SiteSearch.prototype.init = function(){
 
-        this.registerSearchButtonClickListner();
         this.registerOpenSearchButtonClickListner();
         this.registerSearchFieldChangeListner();
-    }
-
-    SiteSearch.prototype.registerSearchButtonClickListner = function(){
-        var me = this;
-
-        let searchButton = document.getElementById('search-button');
-        searchButton.onclick = function(){
-            me.doSearch();
-        }
+        this.registerCloseSearchButtonClickListner();
+        this.registerCloseOnESCListner();
     }
 
     SiteSearch.prototype.registerOpenSearchButtonClickListner = function(){
@@ -53,7 +48,32 @@
     }
 
     SiteSearch.prototype.registerSearchFieldChangeListner = function(){
+        var me = this;
 
+        let searchBox = document.getElementById('search');
+        searchBox.addEventListener('input', function (evt) {
+            me.doSearch();
+        });
+    }
+
+    SiteSearch.prototype.registerCloseSearchButtonClickListner = function(){
+        var me = this;
+
+        let closeSearchButton = document.getElementById('close-search-button');
+        closeSearchButton.onclick = function(){
+            me.closeSearchContainer();
+        }
+    }
+
+    SiteSearch.prototype.registerCloseOnESCListner = function(){
+        var me = this;
+
+        document.onkeydown = function(evt) {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+                me.closeSearchContainer();
+            }
+        };
     }
 
     SiteSearch.prototype.doSearch = function(){
@@ -106,7 +126,7 @@
                 };
 
                 console.log(searchResult);
-                this.output += '<div class="search-result"> <a href="' + searchResult.url + '">' + searchResult.title + '</a> </div>';
+                this.output += '<a href="' + searchResult.url + '"> <div class="search-result">' + searchResult.title + '</div> </a>';
             }
 
             this.searchResults = resutlList;
@@ -121,6 +141,10 @@
 
     SiteSearch.prototype.showSearchContainer = function(){
         document.querySelector('#sitesearch').style.display = "block";
+    }
+
+    SiteSearch.prototype.closeSearchContainer = function(){
+        document.querySelector('#sitesearch').style.display = "none";
     }
 
     document.siteSearch = new SiteSearch();

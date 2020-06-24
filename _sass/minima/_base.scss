@@ -1,4 +1,15 @@
 /**
+ * Global Variables
+ */
+$highlight-color: black;
+$search-text-color: white;
+
+$search-background-color: rgba( $highlight-color, .9 );
+$search-close-background-color: lighten( $highlight-color, 20% );
+
+
+
+/**
  * Reset some basic elements
  */
 body, h1, h2, h3, h4, h5, h6,
@@ -97,6 +108,15 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: $base-font-weight;
 }
 
+h4{
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
 
 /**
